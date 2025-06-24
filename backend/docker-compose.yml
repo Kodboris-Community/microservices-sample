@@ -1,0 +1,183 @@
+version: "3.8"
+
+services:
+  api-gateway:
+    container_name: api-gateway
+    hostname: api-gateway
+    build:
+      context: ./api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - consul
+      - logstash
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - backend
+
+  service-one:
+    container_name: service-one
+    hostname: service-one
+    build:
+      context: ./service-one
+    ports:
+      - "8082:8082"
+    depends_on:
+      - rabbit
+      - service-one-db
+      - consul
+      - logstash
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - backend
+
+  service-one-db:
+    container_name: service-one-db
+    hostname: serviceonedb
+    image: mongo:4.2.21
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${SERVICE_ONE_MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${SERVICE_ONE_MONGO_PASS}
+      MONGO_INITDB_DATABASE: ${SERVICE_ONE_MONGO_DB}
+    volumes:
+      - mongodata:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    ports:
+      - "27017:27017"
+    networks:
+      - backend
+
+  service-two:
+    container_name: service-two
+    hostname: service-two
+    build:
+      context: ./service-two
+    ports:
+      - "8084:8084"
+    depends_on:
+      - rabbit
+      - service-two-db
+      - consul
+      - logstash
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - backend
+
+  service-two-db:
+    container_name: service-two-db
+    hostname: servicetwodb
+    image: mysql/mysql-server:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SERVICE_TWO_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${SERVICE_TWO_MYSQL_DATABASE}
+      MYSQL_USER: ${SERVICE_TWO_MYSQL_USER}
+      MYSQL_PASSWORD: ${SERVICE_TWO_MYSQL_PASSWORD}
+    ports:
+      - "3310:3306"
+    networks:
+      - backend
+
+  rabbit:
+    image: rabbitmq:3.9.20-management-alpine
+    container_name: rabbit-mq
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    networks:
+      - backend
+
+  consul:
+    image: consul:1.12.2
+    container_name: consul
+    hostname: consul
+    command: consul agent -server -client 0.0.0.0 -ui -bootstrap-expect=3 -data-dir=/consul/data -retry-join=consul2 -retry-join=consul3 -datacenter=blr
+    ports:
+      - "8500:8500"
+      - "8600:8600"
+    networks:
+      - backend
+
+  consul2:
+    image: consul:1.12.2
+    container_name: consul-2
+    hostname: consul2
+    command: consul agent -server -data-dir=/consul/data -retry-join=consul -retry-join=consul3 -datacenter=blr
+    networks:
+      - backend
+
+  consul3:
+    image: consul:1.12.2
+    container_name: consul-3
+    hostname: consul3
+    command: consul agent -server -data-dir=/consul/data -retry-join=consul -retry-join=consul2 -datacenter=blr
+    networks:
+      - backend
+
+  scope:
+    image: weaveworks/scope:latest
+    container_name: weave-scope
+    hostname: weave-scope
+    pid: "host"
+    privileged: true
+    ports:
+      - "4040:4040"
+    labels:
+      - "works.weave.role=system"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:rw"
+    command:
+      - "--probe.docker"
+      - "true"
+    networks:
+      - backend
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.2.3
+    container_name: elasticsearch
+    hostname: elasticsearch
+    environment:
+      cluster.name: elasticsearch
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+      discovery.type: single-node
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - backend
+
+  logstash:
+    image: logstash:8.2.3
+    container_name: log-stash
+    hostname: logstash
+    ports:
+      - "5001:5001"
+    volumes:
+      - /Users/Shared/data/tools/logstash/:/tmp/
+    command: >
+      logstash --debug -e 'input { tcp { port => 5001 codec => json { charset => "UTF-8" } } } output { elasticsearch { hosts => "elasticsearch:9200" } }'
+    depends_on:
+      - elasticsearch
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  mongodata:

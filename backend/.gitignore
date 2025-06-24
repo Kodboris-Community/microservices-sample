@@ -1,0 +1,63 @@
+# Node.js artifacts (if applicable)
+**/node_modules/
+**/dist/
+**/build/
+
+# Java artifacts
+**/target/
+**/*.jar
+**/*.war
+**/*.class
+
+# Spring Boot and Maven/Gradle
+**/.mvn/
+**/.gradle/
+**/logs/
+**/*.log
+
+# IntelliJ and Eclipse IDEs
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+
+# VS Code
+.vscode/
+
+# OS and editor-specific files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Environment configuration
+.env
+*.env
+
+# Database volumes and init scripts
+mongodata/
+mongo-init.js
+
+# Docker volumes, pid, socket files
+*.pid
+*.sock
+
+# Docker override file (local development)
+docker-compose.override.yml
+
+# Logstash temp config/data
+/tmp/
+logstash/config/
+logstash/data/
+
+# Weave Scope temp
+scope-data/
+
+# Consul data dirs (if local bind mounts are used)
+consul-data/
+consul2-data/
+consul3-data/
+
+# RabbitMQ persistence (if enabled locally)
+rabbitmq-data/

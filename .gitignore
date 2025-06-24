@@ -1,0 +1,95 @@
+# ------------------------
+# General
+**/__pycache__/
+**/.DS_Store
+*.log
+*.tmp
+*.bak
+*.orig
+*.swp
+*.swo
+*.pid
+*.sock
+*.iml
+*.class
+
+# Logs
+logs/
+log/
+tmp/
+
+# Environment Variables
+.env
+*.env
+
+# Node.js / Angular
+**/node_modules/
+**/dist/
+**/build/
+web-application/dist/
+web-application/.angular/
+
+# Java / Spring Boot / Maven / Gradle
+**/target/
+**/.mvn/
+**/.gradle/
+**/build/
+**/*.jar
+**/*.war
+**/.classpath
+**/.project
+**/.settings/
+
+# Python
+*.pyc
+*.pyo
+
+# IDEs and Editors
+.vscode/
+.idea/
+
+# Docker and Compose
+docker-compose.override.yml
+*.pid
+*.sock
+
+# Docker Volumes & Init Scripts
+mongodata/
+mongo-init.js
+rabbitmq-data/
+consul-data/
+consul2-data/
+consul3-data/
+scope-data/
+
+# Logstash
+logstash/config/
+logstash/data/
+
+# Certbot & Nginx
+certbot/conf/
+certbot/www/
+
+# Documentation Screenshots and Diagrams (optional if not versioning assets)
+documents/screens/
+documents/architecture/
+documents/sequence-diagram/
+
+# Swagger API docs (if generated)
+swagger-ui/
+swagger-output/
+
+# IntelliJ & Eclipse (Java IDEs)
+*.iws
+*.ipr
+*.idea/
+*.metadata/
+bin/
+
+# Miscellaneous Auto-generated
+.DS_Store
+Thumbs.db
+ehthumbs.db
+npm-debug.log
+yarn-debug.log
+yarn-error.log

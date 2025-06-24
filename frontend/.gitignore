@@ -1,0 +1,39 @@
+# Ignore Docker build artifacts and volumes
+**/__pycache__/
+**/.DS_Store
+**/node_modules/
+**/dist/
+**/build/
+
+# Nginx and Certbot data
+certbot/conf/
+certbot/www/
+
+# Environment variables
+.env
+*.env
+
+# Logs
+*.log
+logs/
+log/
+
+# OS or IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker-related
+*.pid
+*.sock
+docker-compose.override.yml
+
+# Ignore output of web-application Angular build
+web-application/dist/
+web-application/.angular/
+
+# Ignore any auto-generated files
+*.bak
+*.tmp
+*.orig
