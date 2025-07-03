@@ -12,7 +12,7 @@ services:
       - consul
       - logstash
     environment:
-      SPRING_PROFILES_ACTIVE: ${PROFILE}
+      SPRING_PROFILES_ACTIVE: docker
     networks:
       - backend
 
@@ -29,7 +29,7 @@ services:
       - consul
       - logstash
     environment:
-      SPRING_PROFILES_ACTIVE: ${PROFILE}
+      SPRING_PROFILES_ACTIVE: docker
     networks:
       - backend
 
@@ -62,7 +62,7 @@ services:
       - consul
       - logstash
     environment:
-      SPRING_PROFILES_ACTIVE: ${PROFILE}
+      SPRING_PROFILES_ACTIVE: docker
     networks:
       - backend
 
@@ -146,7 +146,8 @@ services:
       cluster.name: elasticsearch
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
       discovery.type: single-node
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      xpack.security.enabled: false
+      xpack.security.http.ssl.enabled: false
     ulimits:
       memlock:
         soft: -1
@@ -157,6 +158,8 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
     networks:
       - backend
 
@@ -181,3 +184,4 @@ networks:
 
 volumes:
   mongodata:
+  esdata:
