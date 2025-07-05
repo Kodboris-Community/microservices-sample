@@ -1,0 +1,25 @@
+name: Backend Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/**'
+      - 'docker-compose.yml'
+      - '.github/workflows/backend-deploy.yml'
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, backend] 
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy backend with Docker Compose
+        working-directory: backend
+        run: |
+          echo "Deploying backend..."
+          echo "${{ secrets.BACKEND_ENV_FILE }}" > .env
+          docker compose down
+          docker compose up -d --build

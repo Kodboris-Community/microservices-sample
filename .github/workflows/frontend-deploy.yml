@@ -1,0 +1,31 @@
+name: Frontend Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'frontend/**'
+      - 'docker-compose.yml'
+    
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: SSH and deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.FRONTEND_SERVER_IP }}
+          username: ${{ secrets.FRONTEND_SERVER_USER }}
+          key: ${{ secrets.FRONTEND_SERVER_SSH_KEY }}
+          port: 22
+          script: |
+            cd /home/azureuser/microservices-sample/frontend
+            git pull origin main
+            docker compose down
+            docker compose up --build -d
+            echo "Frontend deployed successfully!"
