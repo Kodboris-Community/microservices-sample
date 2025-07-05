@@ -2,7 +2,7 @@ name: Backend Deploy
 
 on:
   push:
-    branches: [main]
+    branches: [jaiye/microservices]
     paths:
       - 'backend/**'
       - 'docker-compose.yml'
