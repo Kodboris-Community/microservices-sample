@@ -1,0 +1,73 @@
+
+name: CI/CD Pipeline for Microservice Architecture
+
+on:
+  push:
+    branches:
+      - taiwo-kibana
+  pull_request:
+    branches:
+      - taiwo-kibana
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+
+jobs:
+  setup:
+    name: Setup & Checkout
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+  deploy-backend:
+    name: Deploy Backend to EC2 (Self-hosted)
+    runs-on: [self-hosted, linux, backend-runner]
+    needs: setup
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Inject .env files into backend directory
+        run: |
+          cd backend
+          echo "${{ secrets.BACKEND_ENV_FILE }}" > .env
+
+      - name: Build and deploy backend services
+        run: |
+          cd backend
+          done
+          docker compose up -d --build --force-recreate
+
+  
+  deploy-frontend:
+    name: Deploy Frontend to EC2
+    runs-on: ubuntu-latest
+    needs: deploy-apigateway
+
+    steps:
+      - name: SSH to frontend instance
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.TEEWAI_FRONTEND_HOST }}
+          username: ${{ secrets.TEEWAI_FRONTEND_USER }}
+          key: ${{ secrets.TEEWAI_FRONTEND_KEY }}
+          port: ${{ secrets.PORT }}
+          
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build and deploy frontend
+        run: |
+          cd frontend
+          docker compose up -d --build --force-recreate
