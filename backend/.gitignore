@@ -61,3 +61,4 @@ consul3-data/
 
 # RabbitMQ persistence (if enabled locally)
 rabbitmq-data/
+/
