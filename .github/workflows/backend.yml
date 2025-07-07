@@ -27,7 +27,7 @@ jobs:
 
       - name: Inject .env files into backend directory
         run: |
-          cd ~/microservices-sample/backend
+          cd backend
           echo "${{ secrets.BACKEND_ENV_FILE }}" > .env
 
       - name: Build and deploy backend services
