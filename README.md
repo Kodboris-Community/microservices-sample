@@ -24,7 +24,7 @@ This microservices-sample project demonstrates how multiple services run indepen
 
 The sample application has two services namely service-one and service-two. Each of the service has its own database service-one-db and service-two-db respectively. During the startup of the services, it persists the service name and an auto generated UUID in its perspective database and sends the data to the RabbitMQ exchange which then broadcasts the data to all the queues based on the routing key. Every microservices listens to its own RabbitMQ queue and keeps updating the database as and when it receives the data.
 
-Below are the screens of the application.
+Below are the screens of the application..
 
 ![alt tag](https://github.com/mudigal-technologies/microservices-sample/blob/version-5/documents/screens/_Web%20App/01.%20Home.png?raw=true)
 
