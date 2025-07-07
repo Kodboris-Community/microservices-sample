@@ -171,7 +171,7 @@ Microservices sample project uses a number of open source projects to work prope
 
 ### Development
 
-Below are the steps to bring up the development environment and get started.
+Below are the steps to bring up the development environment and get started...........
 
 1) Install Git, Java, Maven and Docker</br>
 2) For the project using https://github.com/mudigal-technologies/microservices-sample.git
