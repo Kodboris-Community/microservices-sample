@@ -5,7 +5,5 @@ server.publicBaseUrl: "https://taiwofaladeprojects.xyz/kibana"
 
 elasticsearch.hosts: [ "https://192.168.1.72:9200" ]
 elasticsearch.serviceAccountToken: "AAEAAWVsYXN0aWMva2liYW5hL2tpYmFuYS10b2tlbjp3VUd0ZktBT1RVdTR4V2k2UXZPLTF3"
-elasticsearch.username: "elastic"
-elasticsearch.password: "soIyGTqs14rJObearuJz"
 elasticsearch.ssl.verificationMode: none
 
