@@ -24,13 +24,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full clone in case needed
 
-      - name: Inject .env files into backend directory
-        run: |
-          cd backend
-          echo "${{ secrets.BACKEND_ENV_FILE }}" > .env
+      - name: Inject .env file
+        working-directory: backend
+        run: echo "${{ secrets.BACKEND_ENV_FILE }}" > .env
 
       - name: Build and deploy backend services
-        run: |
-          cd backend
-          docker compose up -d --build --force-recreate
+        working-directory: backend
+        run: docker compose up -d --build --force-recreate
+
+
