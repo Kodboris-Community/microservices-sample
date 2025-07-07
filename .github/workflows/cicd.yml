@@ -30,7 +30,7 @@ jobs:
 
   deploy-backend:
     name: Deploy Backend to EC2 (Self-hosted)
-    runs-on: [self-hosted, backend]
+    runs-on: [self-hosted, linux, backend]
     needs: setup
 
     steps:

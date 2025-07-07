@@ -1,0 +1,36 @@
+# .github/workflows/backend.yml
+name: Backend CI/CD Pipeline
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+    branches:
+      - taiwo-kibana
+  pull_request:
+    paths:
+      - 'backend/**'
+    branches:
+      - taiwo-kibana
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+
+jobs:
+  deploy-backend:
+    name: Deploy Backend to EC2 (Self-hosted)
+    runs-on: [self-hosted, linux, backend]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Inject .env files into backend directory
+        run: |
+          cd backend
+          echo "${{ secrets.BACKEND_ENV_FILE }}" > .env
+
+      - name: Build and deploy backend services
+        run: |
+          cd backend
+          docker compose up -d --build --force-recreate

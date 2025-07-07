@@ -1,0 +1,35 @@
+# .github/workflows/frontend.yml
+name: Frontend CI/CD Pipeline
+
+on:
+  push:
+    paths:
+      - 'frontend/**'
+    branches:
+      - taiwo-kibana
+  pull_request:
+    paths:
+      - 'frontend/**'
+    branches:
+      - taiwo-kibana
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+
+jobs:
+  deploy-frontend:
+    name: Deploy Frontend to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy frontend via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.TEEWAI_FRONTEND_HOST }}
+          username: ${{ secrets.TEEWAI_FRONTEND_USER }}
+          key: ${{ secrets.TEEWAI_FRONTEND_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd frontend
+            git pull origin taiwo-kibana
+            docker compose up -d --build --force-recreate
