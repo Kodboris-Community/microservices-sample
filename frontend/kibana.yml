@@ -3,6 +3,5 @@ server.basePath: "/kibana"
 server.rewriteBasePath: true
 
 elasticsearch.hosts: [ "http://192.168.1.72:9200" ]
-elasticsearch.username: "kibana_system"
-elasticsearch.password: "XeCf1R1vI3gLH*HvwZsF"
+elasticsearch.serviceAccountToken: "AAEAAWVsYXN0aWMva2liYW5hL2tpYmFuYS10b2tlbjp3VUd0ZktBT1RVdTR4V2k2UXZPLTF3"
 
