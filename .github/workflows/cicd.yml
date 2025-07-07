@@ -1,4 +1,3 @@
-
 name: CI/CD Pipeline for Microservice Architecture
 
 on:
@@ -8,6 +7,10 @@ on:
   pull_request:
     branches:
       - taiwo-kibana
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
 
 jobs:
   setup:
@@ -42,28 +45,22 @@ jobs:
       - name: Build and deploy backend services
         run: |
           cd backend
-          done
           docker compose up -d --build --force-recreate
 
-  
   deploy-frontend:
     name: Deploy Frontend to EC2
     runs-on: ubuntu-latest
     needs: deploy-backend
 
     steps:
-      - name: SSH to frontend instance
+      - name: Deploy frontend via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.TEEWAI_FRONTEND_HOST }}
           username: ${{ secrets.TEEWAI_FRONTEND_USER }}
           key: ${{ secrets.TEEWAI_FRONTEND_KEY }}
           port: ${{ secrets.PORT }}
-          
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Build and deploy frontend
-        run: |
-          cd frontend
-          docker compose up -d --build --force-recreate
+          script: |
+            cd frontend
+            git pull origin taiwo-kibana
+            docker compose up -d --build --force-recreate
