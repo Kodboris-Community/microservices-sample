@@ -30,6 +30,6 @@ jobs:
           key: ${{ secrets.TEEWAI_FRONTEND_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd frontend
+            cd ~/microservices-sample/frontend
             git pull origin taiwo-kibana
             docker compose up -d --build --force-recreate
