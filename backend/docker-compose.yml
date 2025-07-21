@@ -146,7 +146,8 @@ services:
       cluster.name: elasticsearch
       ES_JAVA_OPTS: "-Xms2g -Xmx2g"
       discovery.type: single-node
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}       
+      xpack.security.enabled: "true"
     ulimits:
       memlock:
         soft: -1
@@ -158,12 +159,17 @@ services:
       - "9200:9200"
       - "9300:9300"
     volumes:
-    - esdata:/usr/share/elasticsearch/data
+      - esdata:/usr/share/elasticsearch/data
     networks:
       - backend
+    healthcheck:
+      test: ["CMD-SHELL", "curl -u Taiwo:tmancity410 -fs http://localhost:9200 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   logstash:
-    image: logstash:8.2.3
+    image: docker.elastic.co/logstash/logstash:8.2.3
     container_name: log-stash
     hostname: logstash
     ports:
@@ -171,7 +177,21 @@ services:
     volumes:
       - /Users/Shared/data/tools/logstash/:/tmp/
     command: >
-      logstash --debug -e 'input { tcp { port => 5001 codec => json { charset => "UTF-8" } } } output { elasticsearch { hosts => "elasticsearch:9200" } }'
+      logstash --debug -e '
+        input {
+          tcp {
+            port => 5001
+            codec => json { charset => "UTF-8" }
+          }
+        }
+        output {
+          elasticsearch {
+            hosts => ["https://elasticsearch:9200"]
+            user => "Taiwo"
+            password => "tmancity410"
+            ssl_verification_mode => "none"
+          }
+        }'
     depends_on:
       - elasticsearch
     networks:
