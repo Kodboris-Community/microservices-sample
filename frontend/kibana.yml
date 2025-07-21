@@ -4,6 +4,6 @@ server.rewriteBasePath: true
 server.publicBaseUrl: "https://taiwofaladeprojects.xyz/kibana"
 
 elasticsearch.hosts: [ "https://192.168.1.72:9200" ]
-elasticsearch.serviceAccountToken: "AAEAAWVsYXN0aWMva2liYW5hL2tpYmFuYS10b2tlbjpSVDlsU0JNN1RRR2JHbTZtWUdsd1B3"
+elasticsearch.serviceAccountToken: "AAEAAWVsYXN0aWMva2liYW5hL2tpYmFuYS10b2tlbjoxNkg3VU90dVJyTzRDQmYwRHlNZHlR"
 elasticsearch.ssl.verificationMode: none
 
