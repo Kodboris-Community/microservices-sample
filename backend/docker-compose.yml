@@ -175,23 +175,7 @@ services:
     ports:
       - "5001:5001"
     volumes:
-      - /Users/Shared/data/tools/logstash/:/tmp/
-    command: >
-      logstash --debug -e '
-        input {
-          tcp {
-            port => 5001
-            codec => json { charset => "UTF-8" }
-          }
-        }
-        output {
-          elasticsearch {
-            hosts => ["https://elasticsearch:9200"]
-            user => "Taiwo"
-            password => "tmancity410"
-            ssl_verification_mode => "none"
-          }
-        }'
+      - /Users/Shared/data/tools/logstash/:/usr/share/logstash/pipeline/
     depends_on:
       - elasticsearch
     networks:
