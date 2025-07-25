@@ -1,8 +1,11 @@
-server.name: kibana
 server.host: "0.0.0.0"
-elasticsearch.hosts: ["http://elasticsearch:9200"]
-elasticsearch.username: "Taiwo"
-elasticsearch.password: "tmancity410"
+server.basePath: "/kibana"
+server.rewriteBasePath: true
+server.publicBaseUrl: "https://taiwofaladeprojects.xyz/kibana"
+elasticsearch.username: "taiwo"
+elasticsearch.password: "Tmancity410"
+
+elasticsearch.hosts: [ "https://192.168.1.72:9200" ]
 elasticsearch.serviceAccountToken: "AAEAAWVsYXN0aWMva2liYW5hL2tpYmFuYS10b2tlbjp0a0VROXpnRFRUYW5jaURzOTVoUnJ3"
 elasticsearch.ssl.verificationMode: none
 
